@@ -70,3 +70,16 @@ jobs:
       run: |
         stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks
 
+    - name: Package static binary
+      shell: bash
+      run: |
+        mkdir package
+        dir=$(stack --system-ghc path --dist-dir)/build/telegraf-openvpn
+        [[ -e "$dir/telegraf-openvpn" ]] && cp "$dir/telegraf-openvpn" ./package/telegraf-openvpn
+
+    - name: Upload static binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: telegraf-openvpn-static
+        path: package/
+
